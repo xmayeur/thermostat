@@ -1,9 +1,3 @@
-# Environment
-mqtt_host = "192.168.1.10"
-mqtt_port = 1884
-# Constants
-default_night = 16
-default_day = 19
 
 
 # Language selection

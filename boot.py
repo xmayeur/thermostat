@@ -1,13 +1,19 @@
 import network
-from param import *
+from locales import *
 from secrets import *
 import webrepl
 from ili9XXX import ili9341, LANDSCAPE
 from xpt2046 import xpt2046
 import lvgl as lv
 import ntptime
-from machine import RTC
+from machine import RTC, reset
 from lib.umqtt.simple2 import MQTTClient
+import json
+
+config = json.load(open('config.json', 'r'))
+mqtt_host = config['mqtt_host']
+mqtt_port = config['mqtt_port']
+
 
 # initialize display & touch screen
 # displ = ili9341(cs=5, dc=4, rst=22, clk=18, mosi=23, miso=19, colormode=0, factor=32)
