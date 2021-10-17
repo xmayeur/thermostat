@@ -1,6 +1,13 @@
 import lvgl as lv
 from param import *
 
+# TFT uses BGR
+RED = lv.color_hex(0x1914B3)
+GREEN = lv.color_hex(0x1d7810)
+ORANGE = lv.color_hex(0x425DF5)
+ORANGE_DARK = lv.color_hex(0x0C287D)
+BLUE = lv.color_hex(0xF7372D)
+BLUE_DARK = lv.color_hex(0x94211B)
 
 class SetCtrl:
 
@@ -25,18 +32,18 @@ class SetCtrl:
         # configure OK & Cancel buttons
         self.btn_ok = lv.btn(self.scr)
         self.btn_ok.add_event_cb(self.ok_cb, lv.EVENT.CLICKED, None)
-        self.btn_ok.set_style_bg_color(lv.palette_main(lv.PALETTE.GREEN), 0)
+        self.btn_ok.set_style_bg_color(GREEN, 0)
         self.lbl_ok = lv.label(self.btn_ok)
         self.lbl_ok.set_text(lv.SYMBOL.OK + " OK")
         self.lbl_ok.set_style_text_color(lv.color_hex(0xFFFFFF), 0)
         self.btn_ok.set_width(lv.SIZE.CONTENT)
         self.btn_ok.set_height(lv.SIZE.CONTENT)
-        self.btn_ok.set_x(70)
+        self.btn_ok.set_x(30)
         self.btn_ok.set_y(200)
 
         self.btn_cancel = lv.btn(self.scr)
         self.btn_cancel.add_event_cb(self.cancel_cb, lv.EVENT.CLICKED, None)
-        self.btn_cancel.set_style_bg_color(lv.palette_main(lv.PALETTE.RED), 0)
+        self.btn_cancel.set_style_bg_color(RED, 0)
         self.lbl_cancel = lv.label(self.btn_cancel)
         self.lbl_cancel.set_text(lv.SYMBOL.CLOSE + " Cancel")
         self.lbl_cancel.set_style_text_color(lv.color_hex(0xFFFFFF), 0)
@@ -91,21 +98,21 @@ class SetCtrl:
 
         style_indicator.init()
         style_indicator.set_bg_opa(lv.OPA.COVER)
-        style_indicator.set_bg_color(lv.palette_main(lv.PALETTE.CYAN))
+        style_indicator.set_bg_color(BLUE)
         style_indicator.set_radius(lv.RADIUS.CIRCLE)
         style_indicator.set_transition(transition_dsc)
 
         style_knob.init()
         style_knob.set_bg_opa(lv.OPA.COVER)
-        style_knob.set_bg_color(lv.palette_main(lv.PALETTE.CYAN))
-        style_knob.set_border_color(lv.palette_darken(lv.PALETTE.CYAN, 3))
+        style_knob.set_bg_color(BLUE)
+        style_knob.set_border_color(BLUE_DARK)
         style_knob.set_border_width(2)
         style_knob.set_radius(lv.RADIUS.CIRCLE)
         style_knob.set_pad_all(6)  # Makes the knob larger
         style_knob.set_transition(transition_dsc)
 
         style_pressed_color.init()
-        style_pressed_color.set_bg_color(lv.palette_darken(lv.PALETTE.CYAN, 2))
+        style_pressed_color.set_bg_color(BLUE_DARK)
         
         self.slider_night.remove_style_all()  # Remove the styles coming from the theme
 
@@ -116,7 +123,7 @@ class SetCtrl:
         self.slider_night.add_style(style_pressed_color, lv.PART.KNOB | lv.STATE.PRESSED)
 
         self.slider_night_label.set_text(str(default_night) + "°C")
-        self.slider_night_title.set_text(NIGHT_TEMP_TITLE)
+        self.slider_night_title.set_text(lv.SYMBOL.MOON + NIGHT_TEMP_TITLE)
         self.slider_night.set_value(default_night, 0)
 
         self.slider_night.set_width(20)
@@ -145,21 +152,21 @@ class SetCtrl:
         style_pressed_color = lv.style_t()
         style_indicator.init()
         style_indicator.set_bg_opa(lv.OPA.COVER)
-        style_indicator.set_bg_color(lv.palette_main(lv.PALETTE.DEEP_ORANGE))
+        style_indicator.set_bg_color(ORANGE)
         style_indicator.set_radius(lv.RADIUS.CIRCLE)
         style_indicator.set_transition(transition_dsc)
 
         style_knob.init()
         style_knob.set_bg_opa(lv.OPA.COVER)
-        style_knob.set_bg_color(lv.palette_main(lv.PALETTE.DEEP_ORANGE))
-        style_knob.set_border_color(lv.palette_darken(lv.PALETTE.DEEP_ORANGE, 3))
+        style_knob.set_bg_color(ORANGE)
+        style_knob.set_border_color(ORANGE_DARK)
         style_knob.set_border_width(2)
         style_knob.set_radius(lv.RADIUS.CIRCLE)
         style_knob.set_pad_all(6)  # Makes the knob larger
         style_knob.set_transition(transition_dsc)
 
         style_pressed_color.init()
-        style_pressed_color.set_bg_color(lv.palette_darken(lv.PALETTE.DEEP_ORANGE, 2))
+        style_pressed_color.set_bg_color(ORANGE_DARK)
 
         self.slider_day.remove_style_all()  # Remove the styles coming from the theme
 
@@ -170,7 +177,7 @@ class SetCtrl:
         self.slider_day.add_style(style_pressed_color, lv.PART.KNOB | lv.STATE.PRESSED)
 
         self.slider_day_label.set_text(str(default_day) + "°C")
-        self.slider_day_title.set_text(DAY_TEMP_TITLE)
+        self.slider_day_title.set_text(lv.SYMBOL.SUN +  DAY_TEMP_TITLE)
         self.slider_day.set_value(default_day, 0)
 
         self.slider_day.set_width(20)

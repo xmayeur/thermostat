@@ -1,5 +1,6 @@
 import network
 from param import *
+from secrets import *
 import webrepl
 from ili9XXX import ili9341, LANDSCAPE
 from xpt2046 import xpt2046
