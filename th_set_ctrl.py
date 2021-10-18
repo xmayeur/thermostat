@@ -1,14 +1,6 @@
 import lvgl as lv
 from locales import *
 
-# TFT uses BGR
-RED = lv.color_hex(0x1914B3)
-GREEN = lv.color_hex(0x1d7810)
-ORANGE = lv.color_hex(0x425DF5)
-ORANGE_DARK = lv.color_hex(0x0C287D)
-BLUE = lv.color_hex(0xF7372D)
-BLUE_DARK = lv.color_hex(0x94211B)
-
 
 class SetCtrl:
 
