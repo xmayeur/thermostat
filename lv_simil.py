@@ -1,20 +1,23 @@
 ##### startup script #####
 
-#!/opt/bin/lv_micropython -i
+# !/opt/bin/lv_micropython -i
 
 import lvgl as lv
 import display_driver
 import ujson as json
 
+config = {"mqtt_host": "192.168.1.10", "mqtt_port": 1884, "default_night": 16, "default_day": 19,
+          "week_schedule": [[{"start": "0630", "end": "2330"}, {"start": "0000", "end": "0000"}],
+                            [{"start": "0631", "end": "2330"}, {"start": "0000", "end": "0000"}],
+                            [{"start": "0632", "end": "2200"}, {"start": "0000", "end": "0000"}],
+                            [{"start": "0633", "end": "2330"}, {"start": "0000", "end": "0000"}],
+                            [{"start": "0635", "end": "0853"}, {"start": "0855", "end": "2330"}],
+                            [{"start": "0636", "end": "2330"}, {"start": "0000", "end": "0000"}],
+                            [{"start": "0637", "end": "2330"}, {"start": "0000", "end": "0000"}]]}
 
-config = {
-    "mqtt_host":"192.168.1.10",
-    "mqtt_port":1884,
-    "default_night":16,
-    "default_day":19,
-    "week_schedule":[[{"start":"0630","end":"2330"}],[{"start":"0631","end":"2330"}],[{"start":"0632","end":"2200"}],[{"start":"0633","end":"2330"}],[{"start":"0635","end":"0853"},{"start":"0855","end":"2330"}],[{"start":"0636","end":"2330"}],[{"start":"0637","end":"2330"}]]
-}
+
 # Language selection
+
 
 class Lang:
     FR = 0
@@ -28,9 +31,9 @@ NIGHT_TEMP_TITLE = ["Temperature Nuit", "Night Temperature"][lang]
 DAY_TEMP_TITLE = ["Temperature Jour", "Day Temperature"][lang]
 
 days = [
-        ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"],
-        ["Mon", "Tue", "Wed", 'Thu', "Fri", "Sat", "Sun"]
-    ][lang]
+    ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"],
+    ["Mon", "Tue", "Wed", 'Thu', "Fri", "Sat", "Sun"]
+][lang]
 
 # TFT uses BGR
 RED = lv.color_hex(0x1914B3)
@@ -40,7 +43,7 @@ ORANGE_DARK = lv.color_hex(0x0C287D)
 BLUE = lv.color_hex(0xF7372D)
 BLUE_DARK = lv.color_hex(0x94211B)
 hours = ["{:02d}".format(x) for x in range(0, 24)]
-minutes = ['0', '15', '30', '45']
+minutes = ['00', '15', '30', '45']
 
 
 class SetSchedule:
@@ -88,46 +91,39 @@ class SetSchedule:
         if code == lv.EVENT.VALUE_CHANGED:
             self.sel_day = obj.get_selected()
             x = self.schedule[self.sel_day]
-            self.roller2.set_selected(int(x[0]['start'][:2]), lv.ANIM.ON)
-            self.roller3.set_selected(int(x[0]['start'][2:]), lv.ANIM.ON)
-            self.roller4.set_selected(int(x[0]['end'][:2]), lv.ANIM.ON)
-            self.roller5.set_selected(int(x[0]['end'][2:]), lv.ANIM.ON)
-            self.start_hr= int(x[0]['start'][:2])
+            self.start_hr = int(x[0]['start'][:2])
             self.start_min = int(x[0]['start'][2:])
             self.end_hr = int(x[0]['end'][:2])
             self.end_min = int(x[0]['end'][2:])
+
+            self.roller2.set_selected(self.start_hr, lv.ANIM.ON)
+            self.roller3.set_selected(int(self.start_min / 15), lv.ANIM.ON)
+            self.roller4.set_selected(self.end_hr, lv.ANIM.ON)
+            self.roller5.set_selected(int(self.end_min / 15), lv.ANIM.ON)
 
     def event_hdlr_hr(self, e):
         code = e.get_code()
         obj = e.get_target()
         if code == lv.EVENT.VALUE_CHANGED:
-            option = " " * 10
-            obj.get_selected_str(option, len(option))
-            self.start_hr = option.strip()
+            self.start_hr = obj.get_selected()
 
     def event_hdlr_min(self, e):
         code = e.get_code()
         obj = e.get_target()
         if code == lv.EVENT.VALUE_CHANGED:
-            option = " " * 10
-            obj.get_selected_str(option, len(option))
-            self.end_min = option.strip()
+            self.start_min = minutes[obj.get_selected()]
 
     def event_hdlr_end_hr(self, e):
         code = e.get_code()
         obj = e.get_target()
         if code == lv.EVENT.VALUE_CHANGED:
-            option = " " * 10
-            obj.get_selected_str(option, len(option))
-            self.end_hr = option.strip()
+            self.end_hr = obj.get_selected()
 
     def event_hdlr_end_min(self, e):
         code = e.get_code()
         obj = e.get_target()
         if code == lv.EVENT.VALUE_CHANGED:
-            option = " " * 10
-            obj.get_selected_str(option, len(option))
-            self.start_min = option.strip()
+            self.end_min = minutes[obj.get_selected()]
 
     def draw_rollers(self):
         #
@@ -146,6 +142,9 @@ class SetSchedule:
         roller2.set_visible_row_count(4)
         roller2.set_pos(120, 30)
         roller2.add_event_cb(self.event_hdlr_hr, lv.EVENT.ALL, None)
+        lbl2 = lv.label(self.scr)
+        lbl2.set_text("START")
+        lbl2.align_to(self.roller2, lv.ALIGN.OUT_TOP_RIGHT, 10, 0)
 
         roller3 = self.roller3
         roller3.set_options("\n".join(minutes), lv.roller.MODE.INFINITE)
@@ -158,6 +157,9 @@ class SetSchedule:
         roller4.set_visible_row_count(4)
         roller4.set_pos(220, 30)
         roller4.add_event_cb(self.event_hdlr_end_hr, lv.EVENT.ALL, None)
+        lbl4 = lv.label(self.scr)
+        lbl4.set_text(" END ")
+        lbl4.align_to(self.roller4, lv.ALIGN.OUT_TOP_RIGHT, 10, 0)
 
         roller5 = self.roller5
         roller5.set_options("\n".join(minutes), lv.roller.MODE.INFINITE)
@@ -191,9 +193,10 @@ class SetSchedule:
 
     def ok_cb(self, e):
         self.schedule[self.sel_day][0] = {
-            "start": str(self.start_hr) + str(self.start_min),
-            "end": str(self.end_hr) + str(self.end_min)
+            "start": "{:02d}".format(self.start_hr) + self.start_min,
+            "end": "{:02d}".format(self.end_hr) + self.end_min
         }
+        # "{:02d}".format(x)
         self.updated = True
 
     def cancel_cb(self, e):
@@ -203,6 +206,7 @@ class SetSchedule:
 
     def show(self):
         lv.scr_load(self.scr)
+
 
 s = SetSchedule()
 s.show()
