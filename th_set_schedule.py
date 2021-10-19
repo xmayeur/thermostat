@@ -14,7 +14,7 @@ class SetSchedule:
         self.scr = lv.obj()
         self.schedule = {}
         self.updated = False
-        self.sel_day = ''
+        self.sel_day = 0
         self.start_hr = ''
         self.start_min = ''
         self.end_hr = ''
@@ -33,7 +33,7 @@ class SetSchedule:
         try:
             self.schedule = json.load(open('config.json', 'r'))['week_schedule']
         except:
-            self.schedule = None
+            self.schedule = config['week_schedule']
 
     def write_schedule(self):
         try:
@@ -55,6 +55,10 @@ class SetSchedule:
             self.roller3.set_selected(int(x[0]['start'][2:]), lv.ANIM.ON)
             self.roller4.set_selected(int(x[0]['end'][:2]), lv.ANIM.ON)
             self.roller5.set_selected(int(x[0]['end'][2:]), lv.ANIM.ON)
+            self.start_hr= int(x[0]['start'][:2])
+            self.start_min = int(x[0]['start'][2:])
+            self.end_hr = int(x[0]['end'][:2])
+            self.end_min = int(x[0]['end'][2:])
 
     def event_hdlr_hr(self, e):
         code = e.get_code()
@@ -150,8 +154,8 @@ class SetSchedule:
 
     def ok_cb(self, e):
         self.schedule[self.sel_day][0] = {
-            "start": self.start_hr + self.start_min,
-            "end": self.end_hr + self.end_min
+            "start": str(self.start_hr) + str(self.start_min),
+            "end": str(self.end_hr) + str(self.end_min)
         }
         self.updated = True
 
