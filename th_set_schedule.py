@@ -115,13 +115,13 @@ class SetSchedule:
         roller4 = self.roller4
         roller4.set_options("\n".join(hours), lv.roller.MODE.INFINITE)
         roller4.set_visible_row_count(4)
-        roller4.set_pos(230, 30)
+        roller4.set_pos(220, 30)
         roller4.add_event_cb(self.event_hdlr_end_hr, lv.EVENT.ALL, None)
 
         roller5 = self.roller5
         roller5.set_options("\n".join(minutes), lv.roller.MODE.INFINITE)
         roller5.set_visible_row_count(4)
-        roller5.set_pos(280, 30)
+        roller5.set_pos(270, 30)
         roller5.add_event_cb(self.event_hdlr_end_min, lv.EVENT.ALL, None)
 
     def draw_buttons(self):
@@ -149,7 +149,7 @@ class SetSchedule:
         btn_cancel.set_y(200)
 
     def ok_cb(self, e):
-        self.schedule[self.sel_day] = {
+        self.schedule[self.sel_day][0] = {
             "start": self.start_hr + self.start_min,
             "end": self.end_hr + self.end_min
         }
