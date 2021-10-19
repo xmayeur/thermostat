@@ -16,3 +16,9 @@ The firmware is built using [lvgl & microptyhon](https://github.com/lvgl/lv_micr
 
 * mqtt.simple2
 * DHT22
+
+### screen shots
+
+![](./.images/set_schedule.png)
+
+![](.images/set_temp.png)
