@@ -16,9 +16,7 @@ mqtt_port = config['mqtt_port']
 
 
 # initialize display & touch screen
-# displ = ili9341(cs=5, dc=4, rst=22, clk=18, mosi=23, miso=19, colormode=0, factor=32)
 displ = ili9341(cs=5, dc=4, rst=22, clk=18, mosi=23, miso=19, colormode=0, factor=32, rot=LANDSCAPE, width=320, height=240)
-# touch = xpt2046(cs=14, half_duplex=True, mhz=5, max_cmds=16, cal_x0=3783, cal_y0=3948, cal_x1=242,cal_y1=423, transpose=True, samples=3)
 touch = xpt2046(cs=14, half_duplex=True, mhz=5, max_cmds=16, cal_x0=3800, cal_y0=3710, cal_x1=400,cal_y1=300, transpose=False, samples=3)
 
 # set display style
@@ -69,7 +67,7 @@ year, mth, d, day, h, m, s, _ = rtc.datetime()
 msg += "\n%s  %d/%d/%d - %d:%d:%d UTC" %(days[day], year, mth, d, h, m, s)
 label.set_text(msg)
 
-#start webrepl
+# start webrepl
 webrepl.start()
 
 # Initialize MQTT
