@@ -5,10 +5,10 @@ Examples: https://docs.lvgl.io/master/examples.html
 """
 import lvgl as lv
 
+
 class DayTemp:
 
     def __init__(self):
-
         self.day_temp = 20
         self.scr = lv.obj()
 
@@ -45,7 +45,7 @@ class DayTemp:
         # Add selected temperature label
         self.label = lv.label(self.scr)
         self.label.add_style(style, 0)
-        self.label.set_text(str(self.day_temp)+'°C')
+        self.label.set_text(str(self.day_temp) + '°C')
         self.label.set_style_text_font(lv.font_montserrat_16, 0)
         self.label.center()
         self.label.set_y(40)
@@ -61,5 +61,4 @@ class DayTemp:
     def evt_hldr(self, evt):
         _arc = evt.get_target()
         self.day_temp = _arc.get_value()
-        self.label.set_text(str(self.day_temp)+'°C')
-
+        self.label.set_text(str(self.day_temp) + '°C')

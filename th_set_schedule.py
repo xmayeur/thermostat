@@ -1,6 +1,7 @@
 import lvgl as lv
 from locales import *
 import json
+import rtc
 
 hours = ["{:02d}".format(x) for x in range(0, 24)]
 minutes = ['00', '15', '30', '45']
@@ -14,11 +15,7 @@ class SetSchedule:
         self.scr = lv.obj()
         self.schedule = {}
         self.updated = False
-        self.sel_day = 0
-        self.start_hr = ''
-        self.start_min = ''
-        self.end_hr = ''
-        self.end_min = ''
+        self.self_day = 0
         self.roller1 = lv.roller(self.scr)
         self.roller2 = lv.roller(self.scr)
         self.roller3 = lv.roller(self.scr)
@@ -28,6 +25,19 @@ class SetSchedule:
         self.draw_rollers()
         self.draw_buttons()
         self.read_schedule()
+
+        year, mth, d, day, h, m, s, _ = rtc.datetime()
+        self.day = day
+        x = self.schedule[day]
+        self.start_hr = int(x[0]['start'][:2])
+        self.start_min = int(x[0]['start'][2:])
+        self.end_hr = int(x[0]['end'][:2])
+        self.end_min = int(x[0]['end'][2:])
+
+        self.roller2.set_selected(self.start_hr, lv.ANIM.ON)
+        self.roller3.set_selected(int(self.start_min / 15), lv.ANIM.ON)
+        self.roller4.set_selected(self.end_hr, lv.ANIM.ON)
+        self.roller5.set_selected(int(self.end_min / 15), lv.ANIM.ON)
 
     def read_schedule(self):
         try:
@@ -156,7 +166,6 @@ class SetSchedule:
             "start": "{:02d}".format(self.start_hr) + self.start_min,
             "end": "{:02d}".format(self.end_hr) + self.end_min
         }
-        # "{:02d}".format(x)
         self.updated = True
 
     def cancel_cb(self, e):
