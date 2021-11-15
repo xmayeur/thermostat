@@ -1,6 +1,8 @@
 # CONNECTED THERMOSTAT
 Project based on [AZ Delivery Touch](https://www.az-delivery.de/en/products/az-touch-wandgehauseset-mit-2-8-zoll-touchscreen-fur-esp8266-und-esp32) ili9371 + xpt2046 display &amp; ESP32 board
 
+![](AZ%20_delivery%20Touch.png)
+
 ## Dependencies
 
 ### Firmware
