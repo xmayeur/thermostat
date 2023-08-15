@@ -1,6 +1,6 @@
 {
-  "mqtt_host": "192.168.1.10",
-  "mqtt_port": 1884,
+  "mqtt_host": "192.168.129.5",
+  "mqtt_port": 1883,
   "default_night": 16,
   "default_day": 19,
   "week_schedule": [

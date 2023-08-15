@@ -6,7 +6,7 @@ import lvgl as lv
 import display_driver
 import ujson as json
 
-config = {"mqtt_host": "192.168.1.10", "mqtt_port": 1884, "default_night": 16, "default_day": 19,
+config = {"mqtt_host": "192.168.129.5", "mqtt_port": 1883, "default_night": 16, "default_day": 19,
           "week_schedule": [[{"start": "0630", "end": "2330"}, {"start": "0000", "end": "0000"}],
                             [{"start": "0631", "end": "2330"}, {"start": "0000", "end": "0000"}],
                             [{"start": "0632", "end": "2200"}, {"start": "0000", "end": "0000"}],

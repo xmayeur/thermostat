@@ -1,13 +1,20 @@
 import lvgl as lv
-from locales import *
+from param import *
+
+# TFT uses BGR
+RED = lv.color_hex(0x1914B3)
+GREEN = lv.color_hex(0x1d7810)
+ORANGE = lv.color_hex(0x425DF5)
+ORANGE_DARK = lv.color_hex(0x0C287D)
+BLUE = lv.color_hex(0xF7372D)
+BLUE_DARK = lv.color_hex(0x94211B)
 
 
 class SetCtrl:
 
-    def __init__(self, day_temp, night_temp):
+    def __init__(self, day_temp=default_day, night_temp=default_night):
         self.day_temp = day_temp
         self.night_temp = night_temp
-        self.updated = False
         self.parent_scr = lv.scr_act()
 
         # create new screen with two sliders & two buttons
@@ -60,7 +67,6 @@ class SetCtrl:
     def ok_cb(self, e):
         self.day_temp = self.slider_day.get_value()
         self.night_temp = self.slider_night.get_value()
-        self.updated = True
         if self.parent_scr:
             lv.scr_load(self.parent_scr)
 
@@ -69,7 +75,6 @@ class SetCtrl:
         self.slider_night.set_value(self.night_temp, 0)
         self.slider_day_label.set_text("{:d}°C".format(self.slider_day.get_value()))
         self.slider_night_label.set_text("{:d}°C".format(self.slider_night.get_value()))
-        self.updated = False
         if self.parent_scr:
             lv.scr_load(self.parent_scr)
 
@@ -118,9 +123,9 @@ class SetCtrl:
         self.slider_night.add_style(style_knob, lv.PART.KNOB)
         self.slider_night.add_style(style_pressed_color, lv.PART.KNOB | lv.STATE.PRESSED)
 
-        self.slider_night_label.set_text(str(self.night_temp) + "°C")
+        self.slider_night_label.set_text(str(default_night) + "°C")
         self.slider_night_title.set_text(lv.SYMBOL.MOON + NIGHT_TEMP_TITLE)
-        self.slider_night.set_value(self.night_temp, 0)
+        self.slider_night.set_value(default_night, 0)
 
         self.slider_night.set_width(20)
         self.slider_night.set_height(130)
@@ -172,9 +177,9 @@ class SetCtrl:
         self.slider_day.add_style(style_knob, lv.PART.KNOB)
         self.slider_day.add_style(style_pressed_color, lv.PART.KNOB | lv.STATE.PRESSED)
 
-        self.slider_day_label.set_text(str(self.day_temp) + "°C")
+        self.slider_day_label.set_text(str(default_day) + "°C")
         self.slider_day_title.set_text(lv.SYMBOL.SUN +  DAY_TEMP_TITLE)
-        self.slider_day.set_value(self.day_temp, 0)
+        self.slider_day.set_value(default_day, 0)
 
         self.slider_day.set_width(20)
         self.slider_day.set_height(130)

@@ -1,23 +1,19 @@
 import network
-from locales import *
+from param import *
 from secrets import *
 import webrepl
 from ili9XXX import ili9341, LANDSCAPE
 from xpt2046 import xpt2046
 import lvgl as lv
 import ntptime
-from machine import RTC, reset
+from machine import RTC
 from lib.umqtt.simple2 import MQTTClient
-import json
-
-config = json.load(open('config.json', 'r'))
-mqtt_host = config['mqtt_host']
-mqtt_port = config['mqtt_port']
-
 
 # initialize display & touch screen
+# displ = ili9341(cs=5, dc=4, rst=22, clk=18, mosi=23, miso=19, colormode=0, factor=32)
 displ = ili9341(cs=5, dc=4, rst=22, clk=18, mosi=23, miso=19, colormode=0, factor=32, rot=LANDSCAPE, width=320, height=240)
-touch = xpt2046(cs=14, half_duplex=True, mhz=5, max_cmds=16, cal_x0=3800, cal_y0=3710, cal_x1=400,cal_y1=300, transpose=False, samples=3)
+# touch = xpt2046(cs=14, half_duplex=True, mhz=5, max_cmds=16, cal_x0=3783, cal_y0=3948, cal_x1=242,cal_y1=423, transpose=True, samples=3)
+touch = xpt2046(cs=14, half_duplex=True, mhz=5, max_cmds=16, cal_x0=4096, cal_y0=4096, cal_x1=0,cal_y1=0, transpose=False, samples=3)
 
 # set display style
 style = lv.style_t()
@@ -67,7 +63,7 @@ year, mth, d, day, h, m, s, _ = rtc.datetime()
 msg += "\n%s  %d/%d/%d - %d:%d:%d UTC" %(days[day], year, mth, d, h, m, s)
 label.set_text(msg)
 
-# start webrepl
+#start webrepl
 webrepl.start()
 
 # Initialize MQTT
